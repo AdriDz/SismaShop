@@ -1,4 +1,4 @@
-package com.example.sismashop.nav
+package com.example.sismashop.presentation.nav
 
 
 import androidx.compose.runtime.Composable
@@ -6,10 +6,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sismashop.sceens.Lista
-import com.example.sismashop.sceens.Login
-import com.example.sismashop.sceens.Registro
-import com.example.sismashop.sceens.Screen
+import com.example.sismashop.presentation.ui.screens.Lista
+
+import com.example.sismashop.domains.models.Screen
+import com.example.sismashop.presentation.ui.screen.Login
+import com.example.sismashop.presentation.ui.screen.Registro
+import com.example.sismashop.presentation.ui.screens.NuevaPrendaScreen
 
 @Composable
 fun NavGraph(startDestination: String = Screen.Login.route){
@@ -18,14 +20,17 @@ fun NavGraph(startDestination: String = Screen.Login.route){
     NavHost(navController = navController, startDestination = startDestination) {
 
         composable(Screen.Login.route) {
-            Login(navController = navController)
+            Login(navController)
         }
 
-        composable(Screen.Lista.route) {
+        composable(Screen.Catalogo.route) {
             Lista(navController)
         }
         composable(Screen.Registro.route) {
-            Registro(navController = navController)
+            Registro(navController)
+        }
+        composable(Screen.NuevaPrenda.route) {
+            NuevaPrendaScreen(navController)
         }
     }
 

@@ -1,8 +1,8 @@
-package com.example.sismashop.viewmodel
+package com.example.sismashop.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.sismashop.sceens.Screen
+import com.example.sismashop.domains.models.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -34,12 +34,5 @@ class LoginScreenViewModel : ViewModel() {
         _email.value = ""
         _password.value = ""
         _passwordVisible.value = false
-    }
-
-    fun login(navController: NavController) {
-        val isValid = email.value.isNotBlank() && password.value.isNotBlank()
-        if (isValid) {
-            navController.navigate(Screen.Lista.route)
-        }
     }
 }

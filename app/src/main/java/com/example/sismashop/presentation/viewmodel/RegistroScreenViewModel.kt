@@ -1,10 +1,9 @@
-package com.example.sismashop.viewmodel
+package com.example.sismashop.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.sismashop.sceens.Screen
+import com.example.sismashop.domains.models.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class RegistroScreenViewModel : ViewModel() {
 
@@ -45,19 +44,5 @@ class RegistroScreenViewModel : ViewModel() {
         email.value = ""
         password.value = ""
         repeatPassword.value = ""
-    }
-
-    fun registrar(navController: NavController) {
-        val passwordsMatch = password.value == repeatPassword.value && password.value.isNotBlank()
-        val formValid =
-            name.value.isNotBlank() &&
-                    email.value.isNotBlank() &&
-                    password.value.isNotBlank() &&
-                    repeatPassword.value.isNotBlank() &&
-                    passwordsMatch
-
-        if (formValid) {
-            navController.navigate(Screen.Lista.route)
-        }
     }
 }

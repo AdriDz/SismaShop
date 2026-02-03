@@ -1,4 +1,4 @@
-package com.example.sismashop.sceens
+package com.example.sismashop.presentation.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,11 +25,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,23 +48,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sismashop.R
-import com.example.sismashop.viewmodel.LoginScreenViewModel
+import com.example.sismashop.domains.models.Screen
+import com.example.sismashop.presentation.viewmodel.LoginScreenViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun Login(
+fun Login(navController: NavController,
     loginScreenViewModel: LoginScreenViewModel = viewModel(),
-    navController: NavController
+
 ) {
     val email by loginScreenViewModel.email.collectAsState()
     val password by loginScreenViewModel.password.collectAsState()
     val passwordVisible by loginScreenViewModel.passwordVisible.collectAsState()
     val rojo = Color(0xFFC8102E)
     val negro = Color.Black
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -192,7 +202,12 @@ fun Login(
 
                     // Botón de iniciar sesión: solo habilitado si hay email y password
                     Button(
-                        onClick = { loginScreenViewModel.login(navController) },
+                        onClick = { navController.navigate(Screen.Catalogo.route)
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Iniciando Sesion")
+                                delay(3000L)
+                                navController.navigate(Screen.Catalogo.route)
+                            }},
                         enabled = email.isNotBlank() && password.isNotBlank(),
                         colors = ButtonDefaults.buttonColors(containerColor = negro),
                         shape = RoundedCornerShape(14),
@@ -233,7 +248,15 @@ fun Login(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "¿No tienes cuenta? ", color = negro)
-                        TextButton(onClick = { navController.navigate(Screen.Registro.route) }) {
+                        TextButton(onClick = { navController.navigate(Screen.Registro.route)
+                            scope.launch {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Yendo a Registro")
+                                    delay(3000L)
+                                    navController.navigate(Screen.Registro.route)
+                                }
+
+                            }}) {
                             Text(
                                 text = "Regístrate",
                                 fontWeight = FontWeight.Bold,
@@ -253,6 +276,5 @@ fun Login(
 @Preview
 @Composable
 fun LoginPreview() {
-    val navController = rememberNavController()
-    Login(navController = navController)
+    Login(navController = rememberNavController())
 }
